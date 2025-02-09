@@ -1,7 +1,12 @@
+try:
+    import tkinter as tk
+    from tkinter import filedialog  # preserved for legacy compatibility
+except ImportError:
+    # In environments (like Streamlit Cloud) where tkinter is unavailable, ignore it.
+    pass
+
 import pandas as pd
 import datetime
-import tkinter as tk
-from tkinter import filedialog  # preserved for legacy compatibility
 import plotly.graph_objects as go
 import streamlit as st
 
