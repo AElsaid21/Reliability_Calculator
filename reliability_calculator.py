@@ -365,19 +365,6 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         bgcolor="lightgray", borderpad=8, font=dict(size=12)
     )
 
-    def discrepancy_annotation(cat, metric):
-        key = (cat, metric)
-        if key in discrepancies and discrepancies[key]:
-            return dict(
-                text=discrepancies[key],
-                showarrow=False,
-                xref="paper", yref="paper",
-                x=0.02, y=-0.15,
-                font=dict(size=11, color="red")
-            )
-        else:
-            return dict(text="", showarrow=False)
-
     # Update menu buttons now update the built-in title text.
     def visible_list(*idxs):
         vs = [False] * (9 if has_related else 3)
@@ -392,7 +379,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             args=[
                 {"visible": visible_list(0)},
                 {"title.text": "<b>MTBF (All Wells)</b>",
-                 "annotations": [discrepancy_annotation("All Wells", "MTBF")]
+                 "annotations": [ann_all_mtbf, ]
                 }
             ]
         ),
@@ -402,7 +389,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             args=[
                 {"visible": visible_list(1)},
                 {"title.text": "<b>MTTF (All Wells)</b>",
-                 "annotations": [discrepancy_annotation("All Wells", "MTTF")]
+                 "annotations": [ann_all_mttf, ]
                 }
             ]
         ),
@@ -412,7 +399,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             args=[
                 {"visible": visible_list(2)},
                 {"title.text": "<b>AVRL (All Wells)</b>",
-                 "annotations": [discrepancy_annotation("All Wells", "AVRL")]
+                 "annotations": [ann_all_avrl, ]
                 }
             ]
         )
@@ -425,7 +412,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 args=[
                     {"visible": visible_list(3)},
                     {"title.text": "<b>MTBF (Related)</b>",
-                     "annotations": [discrepancy_annotation("Related", "MTBF")]
+                     "annotations": [ann_rel_mtbf, ]
                     }
                 ]
             ),
@@ -435,7 +422,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 args=[
                     {"visible": visible_list(4)},
                     {"title.text": "<b>MTTF (Related)</b>",
-                     "annotations": [discrepancy_annotation("Related", "MTTF")]
+                     "annotations": [ann_rel_mttf, ]
                     }
                 ]
             ),
@@ -445,7 +432,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 args=[
                     {"visible": visible_list(5)},
                     {"title.text": "<b>AVRL (Related)</b>",
-                     "annotations": [discrepancy_annotation("Related", "AVRL")]
+                     "annotations": [ann_rel_avrl, ]
                     }
                 ]
             ),
@@ -455,7 +442,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 args=[
                     {"visible": visible_list(6)},
                     {"title.text": "<b>MTBF (NonRelated)</b>",
-                     "annotations": [discrepancy_annotation("NonRelated", "MTBF")]
+                     "annotations": [ann_nonrel_mtbf, ]
                     }
                 ]
             ),
@@ -465,7 +452,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 args=[
                     {"visible": visible_list(7)},
                     {"title.text": "<b>MTTF (NonRelated)</b>",
-                     "annotations": [discrepancy_annotation("NonRelated", "MTTF")]
+                     "annotations": [ann_nonrel_mttf, ]
                     }
                 ]
             ),
@@ -475,7 +462,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 args=[
                     {"visible": visible_list(8)},
                     {"title.text": "<b>AVRL (NonRelated)</b>",
-                     "annotations": [discrepancy_annotation("NonRelated", "AVRL")]
+                     "annotations": [ann_nonrel_avrl, ]
                     }
                 ]
             ),
@@ -497,11 +484,11 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         title=dict(
             text="<b>MTBF (All Wells)</b>",
             x=0.5,
-            y=1.1,
+            y=1.2,  # placed above the whole graph (in the margin)
             xanchor="center",
-            yanchor="top"
+            yanchor="bottom"
         ),
-        margin=dict(t=180),  # increased top margin for extra space
+        margin=dict(t=220),  # increased top margin for extra space for update menu and title
         xaxis_title="Date",
         yaxis_title="Days",
         template="plotly_white",
@@ -510,7 +497,7 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         updatemenus=[
             go.layout.Updatemenu(
                 buttons=buttons,
-                x=0.5, y=1.3,  # update menu placed at the very top
+                x=0.5, y=1.3,  # update menu placed at the very top (above the title)
                 xanchor="center", yanchor="top"
             )
         ]
