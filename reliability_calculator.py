@@ -378,15 +378,16 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         else:
             return dict(text="", showarrow=False)
 
-    # Helper to build a bold title annotation in the middle of the plot
+    # Helper to build a bold title annotation in the top center of the plot area.
+    # Using "x domain" and "y domain" ensures the annotation is relative only to the plot area.
     def get_title_annotation(title_text):
         return dict(
             text=f"<b>{title_text}</b>",
             showarrow=False,
-            xref="paper",
-            yref="paper",
+            xref="x domain",
+            yref="y domain",
             x=0.5,
-            y=0.5,  # positioned in the middle of the plot area
+            y=0.95,  # placed near the top of the plot area
             font=dict(size=16)
         )
 
@@ -564,11 +565,11 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         updatemenus=[
             go.layout.Updatemenu(
                 buttons=buttons,
-                x=0.5, y=1.15,  # update menu now placed above the title annotation
+                x=0.5, y=1.15,  # update menu placed above the title annotation
                 xanchor="center", yanchor="bottom"
             )
         ],
-        # Initial annotation: the title in bold in the middle of the plot area.
+        # Initial annotation: the title in bold at the top center of the plot area.
         annotations=[get_title_annotation("MTBF (All Wells)")]
     )
     st.plotly_chart(fig, use_container_width=True)
