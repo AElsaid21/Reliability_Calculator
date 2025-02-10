@@ -378,71 +378,9 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         else:
             return dict(text="", showarrow=False)
 
-    # Helper to build a bold title annotation in the top center of the plot area.
-    # Using "x domain" and "y domain" ensures the annotation is relative only to the plot area.
-    def get_title_annotation(title_text):
-        return dict(
-            text=f"<b>{title_text}</b>",
-            showarrow=False,
-            xref="x domain",
-            yref="y domain",
-            x=0.5,
-            y=0.95,  # placed near the top of the plot area
-            font=dict(size=16)
-        )
-
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatter(
-        x=result_df["Date"], y=result_df["CumulativeMTBF"],
-        name="MTBF (All Wells)"
-    ))
-    fig.add_trace(go.Scatter(
-        x=result_df["Date"], y=result_df["CumulativeMTTF"],
-        name="MTTF (All Wells)",
-        visible=False
-    ))
-    fig.add_trace(go.Scatter(
-        x=result_df["Date"], y=result_df["CumulativeAVRL"],
-        name="AVRL (All Wells)",
-        visible=False
-    ))
-    offset = 3
-    if has_related:
-        fig.add_trace(go.Scatter(
-            x=result_df["Date"], y=result_df["CumulativeMTBF_Related"],
-            name="MTBF (Related)",
-            visible=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=result_df["Date"], y=result_df["CumulativeMTTF_Related"],
-            name="MTTF (Related)",
-            visible=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=result_df["Date"], y=result_df["CumulativeAVRL_Related"],
-            name="AVRL (Related)",
-            visible=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=result_df["Date"], y=result_df["CumulativeMTBF_NonRelated"],
-            name="MTBF (NonRelated)",
-            visible=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=result_df["Date"], y=result_df["CumulativeMTTF_NonRelated"],
-            name="MTTF (NonRelated)",
-            visible=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=result_df["Date"], y=result_df["CumulativeAVRL_NonRelated"],
-            name="AVRL (NonRelated)",
-            visible=False
-        ))
-        offset = 9
-
+    # Update menu buttons now update the built-in title text.
     def visible_list(*idxs):
-        vs = [False] * offset
+        vs = [False] * (9 if has_related else 3)
         for i in idxs:
             vs[i] = True
         return vs
@@ -453,8 +391,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             method="update",
             args=[
                 {"visible": visible_list(0)},
-                {
-                    "annotations": [get_title_annotation("MTBF (All Wells)"), discrepancy_annotation("All Wells", "MTBF")]
+                {"title.text": "<b>MTBF (All Wells)</b>",
+                 "annotations": [discrepancy_annotation("All Wells", "MTBF")]
                 }
             ]
         ),
@@ -463,8 +401,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             method="update",
             args=[
                 {"visible": visible_list(1)},
-                {
-                    "annotations": [get_title_annotation("MTTF (All Wells)"), discrepancy_annotation("All Wells", "MTTF")]
+                {"title.text": "<b>MTTF (All Wells)</b>",
+                 "annotations": [discrepancy_annotation("All Wells", "MTTF")]
                 }
             ]
         ),
@@ -473,8 +411,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             method="update",
             args=[
                 {"visible": visible_list(2)},
-                {
-                    "annotations": [get_title_annotation("AVRL (All Wells)"), discrepancy_annotation("All Wells", "AVRL")]
+                {"title.text": "<b>AVRL (All Wells)</b>",
+                 "annotations": [discrepancy_annotation("All Wells", "AVRL")]
                 }
             ]
         )
@@ -486,8 +424,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 method="update",
                 args=[
                     {"visible": visible_list(3)},
-                    {
-                        "annotations": [get_title_annotation("MTBF (Related)"), discrepancy_annotation("Related", "MTBF")]
+                    {"title.text": "<b>MTBF (Related)</b>",
+                     "annotations": [discrepancy_annotation("Related", "MTBF")]
                     }
                 ]
             ),
@@ -496,8 +434,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 method="update",
                 args=[
                     {"visible": visible_list(4)},
-                    {
-                        "annotations": [get_title_annotation("MTTF (Related)"), discrepancy_annotation("Related", "MTTF")]
+                    {"title.text": "<b>MTTF (Related)</b>",
+                     "annotations": [discrepancy_annotation("Related", "MTTF")]
                     }
                 ]
             ),
@@ -506,8 +444,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 method="update",
                 args=[
                     {"visible": visible_list(5)},
-                    {
-                        "annotations": [get_title_annotation("AVRL (Related)"), discrepancy_annotation("Related", "AVRL")]
+                    {"title.text": "<b>AVRL (Related)</b>",
+                     "annotations": [discrepancy_annotation("Related", "AVRL")]
                     }
                 ]
             ),
@@ -516,8 +454,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 method="update",
                 args=[
                     {"visible": visible_list(6)},
-                    {
-                        "annotations": [get_title_annotation("MTBF (NonRelated)"), discrepancy_annotation("NonRelated", "MTBF")]
+                    {"title.text": "<b>MTBF (NonRelated)</b>",
+                     "annotations": [discrepancy_annotation("NonRelated", "MTBF")]
                     }
                 ]
             ),
@@ -526,8 +464,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 method="update",
                 args=[
                     {"visible": visible_list(7)},
-                    {
-                        "annotations": [get_title_annotation("MTTF (NonRelated)"), discrepancy_annotation("NonRelated", "MTTF")]
+                    {"title.text": "<b>MTTF (NonRelated)</b>",
+                     "annotations": [discrepancy_annotation("NonRelated", "MTTF")]
                     }
                 ]
             ),
@@ -536,8 +474,8 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
                 method="update",
                 args=[
                     {"visible": visible_list(8)},
-                    {
-                        "annotations": [get_title_annotation("AVRL (NonRelated)"), discrepancy_annotation("NonRelated", "AVRL")]
+                    {"title.text": "<b>AVRL (NonRelated)</b>",
+                     "annotations": [discrepancy_annotation("NonRelated", "AVRL")]
                     }
                 ]
             ),
@@ -548,15 +486,22 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
             label="Show All Traces",
             method="update",
             args=[
-                {"visible": [True] * offset},
-                {"annotations": [get_title_annotation("All Traces Displayed")]}
+                {"visible": [True] * (9 if has_related else 3)},
+                {"title.text": "<b>All Traces Displayed</b>",
+                 "annotations": []}
             ]
         )
     )
 
     fig.update_layout(
-        # Remove the built-in title and use our annotation instead.
-        margin=dict(t=120),  # increased top margin for extra space
+        title=dict(
+            text="<b>MTBF (All Wells)</b>",
+            x=0.5,
+            y=1.1,
+            xanchor="center",
+            yanchor="top"
+        ),
+        margin=dict(t=180),  # increased top margin for extra space
         xaxis_title="Date",
         yaxis_title="Days",
         template="plotly_white",
@@ -565,12 +510,10 @@ def plot_interactive_charts(result_df: pd.DataFrame, has_related: bool, discrepa
         updatemenus=[
             go.layout.Updatemenu(
                 buttons=buttons,
-                x=0.5, y=1.15,  # update menu placed above the title annotation
-                xanchor="center", yanchor="bottom"
+                x=0.5, y=1.3,  # update menu placed at the very top
+                xanchor="center", yanchor="top"
             )
-        ],
-        # Initial annotation: the title in bold at the top center of the plot area.
-        annotations=[get_title_annotation("MTBF (All Wells)")]
+        ]
     )
     st.plotly_chart(fig, use_container_width=True)
 
